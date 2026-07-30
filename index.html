@@ -52,35 +52,50 @@
         </div>
         <h1>All your insurance, <span class="hl">sorted in one place.</span></h1>
         <p>Fact Insure brings every kind of cover under one roof. We're tied up with all the major companies — so you compare, buy and get fully serviced without running between offices.</p>
+        <ul class="hero-points">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Claim assistance</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Endorsements</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Inspections &amp; renewals</li>
+        </ul>
         <div class="hero-actions">
-          <a class="btn" href="contact.html">Get a free quote
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
           <a class="btn btn--ghost" href="services.html">Explore services</a>
         </div>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <svg class="hero-shield" viewBox="0 0 100 112">
-          <defs>
-            <linearGradient id="heroGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#3a45b0"/><stop offset="1" stop-color="#171a6e"/>
-            </linearGradient>
-          </defs>
-          <path class="hbody" d="M20,12 L80,12 Q84.5,12 84.5,16.5 L84.5,54 C84.5,78 70,96 50,108 C30,96 15.5,78 15.5,54 L15.5,16.5 Q15.5,12 20,12 Z"/>
-          <path class="hcheck" d="M34,55 L45,68 L68,38"/>
-        </svg>
-        <div class="float-card fc-1">
-          <span class="dot" style="background:#e8f7ef;color:#1aa260"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
-          Claim assistance
-        </div>
-        <div class="float-card fc-2">
-          <span class="dot" style="background:#eef0fe;color:#1c1f85"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
-          Endorsements
-        </div>
-        <div class="float-card fc-3">
-          <span class="dot" style="background:#ffe9df;color:#e0632c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-          Inspections
-        </div>
+
+      <!-- ============ HERO QUOTE FORM ============ -->
+      <div class="hero-quote">
+        <form class="hq-card" id="heroQuote" novalidate>
+          <div class="hq-progress"><span id="hqBar"></span></div>
+          <div class="hq-head">
+            <span class="hq-badge">Free · takes 30 seconds</span>
+            <h2>Get your free quote</h2>
+            <p>Two quick details and we'll call you back with the best options.</p>
+          </div>
+
+          <p class="hq-step"><span class="hq-num">1</span>What would you like to cover?</p>
+          <div class="hq-chips" role="group" aria-label="Type of insurance">
+            <button type="button" class="hq-chip" data-cover="Health"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a2 2 0 0 0-2 2v5H4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h5v5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-5h5a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2h-5V4a2 2 0 0 0-2-2z"/></svg>Health</button>
+            <button type="button" class="hq-chip" data-cover="Motor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>Motor</button>
+            <button type="button" class="hq-chip" data-cover="Life &amp; Term"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>Life</button>
+            <button type="button" class="hq-chip" data-cover="Travel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>Travel</button>
+            <button type="button" class="hq-chip" data-cover="Home &amp; Property"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M9 21v-6h6v6"/></svg>Property</button>
+            <button type="button" class="hq-chip" data-cover="Business"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Business</button>
+          </div>
+
+          <p class="hq-step"><span class="hq-num">2</span>Where should we reach you?</p>
+          <div class="hq-field">
+            <input id="hqName" name="hqName" type="text" autocomplete="name" placeholder="Your name" required>
+          </div>
+          <div class="hq-field">
+            <input id="hqPhone" name="hqPhone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="10-digit mobile number" required>
+          </div>
+
+          <button class="btn hq-submit" type="submit" id="hqSubmit">
+            <span id="hqSubmitText">Get my free quote</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+          <p class="hq-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>We only use this to send your quote. No spam, ever.</p>
+        </form>
       </div>
     </div>
   </div>

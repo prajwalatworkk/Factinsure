@@ -276,6 +276,108 @@
     });
   }
 
+  // Hero quote form — tap a cover, drop two details, straight into WhatsApp
+  var hq = document.getElementById("heroQuote");
+  if (hq) {
+    var hqName = document.getElementById("hqName");
+    var hqPhone = document.getElementById("hqPhone");
+    var hqBar = document.getElementById("hqBar");
+    var hqLabel = document.getElementById("hqSubmitText");
+    var chips = Array.prototype.slice.call(hq.querySelectorAll(".hq-chip"));
+    var cover = "";
+
+    var hqDigits = function (raw) {
+      var d = raw.replace(/\D/g, "");
+      if (d.length === 12 && d.indexOf("91") === 0) d = d.slice(2);
+      else if (d.length === 11 && d.charAt(0) === "0") d = d.slice(1);
+      return d;
+    };
+
+    var hqProgress = function () {
+      var done = 0;
+      if (cover) done++;
+      if (hqName.value.trim().length >= 2) done++;
+      if (hqDigits(hqPhone.value).length === 10) done++;
+      hqBar.style.width = (done / 3 * 100) + "%";
+    };
+
+    var hqFail = function (el, msg) {
+      el.classList.add("is-invalid");
+      var e = el.parentNode.querySelector(".hq-err");
+      if (!e) {
+        e = document.createElement("span");
+        e.className = "hq-err";
+        el.parentNode.appendChild(e);
+      }
+      e.textContent = msg;
+    };
+
+    var hqOk = function (el) {
+      el.classList.remove("is-invalid");
+      var e = el.parentNode.querySelector(".hq-err");
+      if (e) e.remove();
+    };
+
+    var hqLabelText = function () {
+      return cover ? "Get my " + cover.replace(/ &.*/, "") + " quote" : "Get my free quote";
+    };
+
+    chips.forEach(function (c) {
+      c.setAttribute("aria-pressed", "false");
+      c.addEventListener("click", function () {
+        var wasOn = c.classList.contains("is-on");
+        chips.forEach(function (x) {
+          x.classList.remove("is-on");
+          x.setAttribute("aria-pressed", "false");
+        });
+        if (wasOn) {
+          cover = "";
+        } else {
+          c.classList.add("is-on");
+          c.setAttribute("aria-pressed", "true");
+          cover = c.getAttribute("data-cover");
+        }
+        hqLabel.textContent = hqLabelText();
+        hqProgress();
+      });
+    });
+
+    [hqName, hqPhone].forEach(function (el) {
+      el.addEventListener("input", function () { hqOk(el); hqProgress(); });
+    });
+
+    hq.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var bad = null;
+
+      var nm = hqName.value.trim();
+      if (nm.length < 2 || !/[a-zA-Zऀ-ॿ]/.test(nm)) {
+        hqFail(hqName, "Please enter your name.");
+        bad = bad || hqName;
+      } else hqOk(hqName);
+
+      var d = hqDigits(hqPhone.value);
+      if (!d) { hqFail(hqPhone, "Please enter your mobile number."); bad = bad || hqPhone; }
+      else if (d.length !== 10) { hqFail(hqPhone, "Enter a valid 10-digit mobile number."); bad = bad || hqPhone; }
+      else if (!/^[6-9]/.test(d)) { hqFail(hqPhone, "Indian mobile numbers start with 6, 7, 8 or 9."); bad = bad || hqPhone; }
+      else hqOk(hqPhone);
+
+      if (bad) { bad.focus(); return; }
+
+      var msg = "Hi Fact Insure, I'd like a free quote.\n\n" +
+        "Name: " + nm + "\n" +
+        "Mobile: " + d + "\n" +
+        "Cover needed: " + (cover || "Not sure — please advise");
+      window.open("https://wa.me/919606712138?text=" + encodeURIComponent(msg), "_blank", "noopener");
+
+      hqBar.style.width = "100%";
+      hqLabel.textContent = "Opening WhatsApp…";
+      setTimeout(function () { hqLabel.textContent = hqLabelText(); }, 2500);
+    });
+
+    hqProgress();
+  }
+
   // Custom cursor — dot + trailing ring (desktop, fine pointer, motion allowed)
   var finePointer = window.matchMedia && window.matchMedia("(hover:hover) and (pointer:fine)").matches;
   var reduceMo = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
