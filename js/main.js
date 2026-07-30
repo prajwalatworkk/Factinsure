@@ -281,6 +281,7 @@
   if (hq) {
     var hqName = document.getElementById("hqName");
     var hqPhone = document.getElementById("hqPhone");
+    var hqEmail = document.getElementById("hqEmail");
     var hqBar = document.getElementById("hqBar");
     var hqLabel = document.getElementById("hqSubmitText");
     var chips = Array.prototype.slice.call(hq.querySelectorAll(".hq-chip"));
@@ -293,12 +294,15 @@
       return d;
     };
 
+    var hqEmailOk = function (v) { return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(v); };
+
     var hqProgress = function () {
       var done = 0;
       if (cover) done++;
       if (hqName.value.trim().length >= 2) done++;
       if (hqDigits(hqPhone.value).length === 10) done++;
-      hqBar.style.width = (done / 3 * 100) + "%";
+      if (hqEmailOk(hqEmail.value.trim())) done++;
+      hqBar.style.width = (done / 4 * 100) + "%";
     };
 
     var hqFail = function (el, msg) {
@@ -372,7 +376,7 @@
       });
     }
 
-    [hqName, hqPhone].forEach(function (el) {
+    [hqName, hqPhone, hqEmail].forEach(function (el) {
       el.addEventListener("input", function () { hqOk(el); hqProgress(); });
     });
 
@@ -392,11 +396,17 @@
       else if (!/^[6-9]/.test(d)) { hqFail(hqPhone, "Indian mobile numbers start with 6, 7, 8 or 9."); bad = bad || hqPhone; }
       else hqOk(hqPhone);
 
+      var em = hqEmail.value.trim();
+      if (!em) { hqFail(hqEmail, "Please enter your email address."); bad = bad || hqEmail; }
+      else if (!hqEmailOk(em)) { hqFail(hqEmail, "Enter a valid email address, e.g. name@example.com"); bad = bad || hqEmail; }
+      else hqOk(hqEmail);
+
       if (bad) { bad.focus(); return; }
 
       var msg = "Hi Fact Insure, I'd like a free quote.\n\n" +
         "Name: " + nm + "\n" +
         "Mobile: " + d + "\n" +
+        "Email: " + em + "\n" +
         "Cover needed: " + (cover || "Not sure — please advise");
       window.open("https://wa.me/919606712138?text=" + encodeURIComponent(msg), "_blank", "noopener");
 
