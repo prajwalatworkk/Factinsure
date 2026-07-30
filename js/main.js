@@ -318,29 +318,47 @@
       if (e) e.remove();
     };
 
+    // "Life & Term" -> "Life", "Business / Liability" -> "Business"; vague picks stay generic
     var hqLabelText = function () {
-      return cover ? "Get my " + cover.replace(/ &.*/, "") + " quote" : "Get my free quote";
+      if (!cover || /^Not sure/.test(cover)) return "Get my free quote";
+      return "Get my " + cover.split(/ [&\/] /)[0] + " quote";
+    };
+
+    var hqSelect = document.getElementById("hqCover");
+
+    // Chips are shortcuts to the popular covers; the select carries the full list.
+    // Keep them in sync so only one choice is ever active.
+    var hqPaint = function () {
+      chips.forEach(function (x) {
+        var on = x.getAttribute("data-cover") === cover;
+        x.classList.toggle("is-on", on);
+        x.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      if (hqSelect) {
+        hqSelect.value = cover;
+        // a cover picked via chip isn't always in the list, so confirm it stuck
+        if (hqSelect.value !== cover) hqSelect.value = "";
+        hqSelect.classList.toggle("has-value", !!hqSelect.value);
+      }
+      hqLabel.textContent = hqLabelText();
+      hqProgress();
     };
 
     chips.forEach(function (c) {
       c.setAttribute("aria-pressed", "false");
       c.addEventListener("click", function () {
         var wasOn = c.classList.contains("is-on");
-        chips.forEach(function (x) {
-          x.classList.remove("is-on");
-          x.setAttribute("aria-pressed", "false");
-        });
-        if (wasOn) {
-          cover = "";
-        } else {
-          c.classList.add("is-on");
-          c.setAttribute("aria-pressed", "true");
-          cover = c.getAttribute("data-cover");
-        }
-        hqLabel.textContent = hqLabelText();
-        hqProgress();
+        cover = wasOn ? "" : c.getAttribute("data-cover");
+        hqPaint();
       });
     });
+
+    if (hqSelect) {
+      hqSelect.addEventListener("change", function () {
+        cover = hqSelect.value;
+        hqPaint();
+      });
+    }
 
     [hqName, hqPhone].forEach(function (el) {
       el.addEventListener("input", function () { hqOk(el); hqProgress(); });
