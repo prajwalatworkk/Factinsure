@@ -81,7 +81,8 @@
             <button type="button" class="hq-chip" data-cover="Home &amp; Property"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M9 21v-6h6v6"/></svg>Property</button>
             <button type="button" class="hq-chip" data-cover="Business / Liability"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Business</button>
           </div>
-          <div class="hq-more">
+          <button type="button" class="hq-more-toggle" id="hqMoreBtn" aria-expanded="false" aria-controls="hqMore">Something else? See all covers</button>
+          <div class="hq-more" id="hqMore" hidden>
             <select id="hqCover" name="hqCover" aria-label="Choose any other type of cover">
               <option value="">Looking for something else? See all covers</option>
               <option>Health</option>

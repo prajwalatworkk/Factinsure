@@ -360,6 +360,18 @@
       });
     }
 
+    // The full list stays tucked away until asked for, so the chips read as one clean choice
+    var hqMoreBtn = document.getElementById("hqMoreBtn");
+    var hqMore = document.getElementById("hqMore");
+    if (hqMoreBtn && hqMore) {
+      hqMoreBtn.addEventListener("click", function () {
+        hqMore.hidden = false;
+        hqMoreBtn.hidden = true;
+        hqMoreBtn.setAttribute("aria-expanded", "true");
+        if (hqSelect) hqSelect.focus();
+      });
+    }
+
     [hqName, hqPhone].forEach(function (el) {
       el.addEventListener("input", function () { hqOk(el); hqProgress(); });
     });
