@@ -180,14 +180,82 @@
   // Contact form -> opens email client with prefilled message (no backend needed)
   var form = document.getElementById("contactForm");
   if (form) {
+    var fieldOf = function (n) { return form.querySelector('[name="' + n + '"]'); };
+
+    var showError = function (n, msg) {
+      var el = fieldOf(n);
+      if (!el) return;
+      el.classList.add("is-invalid");
+      el.setAttribute("aria-invalid", "true");
+      var err = el.parentNode.querySelector(".field-error");
+      if (!err) {
+        err = document.createElement("span");
+        err.className = "field-error";
+        el.parentNode.appendChild(err);
+      }
+      err.textContent = msg;
+    };
+
+    var clearError = function (n) {
+      var el = fieldOf(n);
+      if (!el) return;
+      el.classList.remove("is-invalid");
+      el.removeAttribute("aria-invalid");
+      var err = el.parentNode.querySelector(".field-error");
+      if (err) err.remove();
+    };
+
+    // Indian mobile: 10 digits starting 6-9. Tolerates spaces, +91 and 0 prefixes.
+    var normalisePhone = function (raw) {
+      var d = raw.replace(/\D/g, "");
+      if (d.length === 12 && d.indexOf("91") === 0) d = d.slice(2);
+      else if (d.length === 11 && d.charAt(0) === "0") d = d.slice(1);
+      return d;
+    };
+
+    ["name", "phone", "email"].forEach(function (n) {
+      var el = fieldOf(n);
+      if (el) el.addEventListener("input", function () { clearError(n); });
+    });
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var get = function (n) {
-        var el = form.querySelector('[name="' + n + '"]');
+        var el = fieldOf(n);
         return el ? el.value.trim() : "";
       };
       var name = get("name"), phone = get("phone"), email = get("email"),
           type = get("type"), message = get("message");
+
+      var firstBad = null;
+      var fail = function (n, msg) { showError(n, msg); if (!firstBad) firstBad = fieldOf(n); };
+
+      if (name.length < 2 || !/[a-zA-Zऀ-ॿ]/.test(name)) {
+        fail("name", "Please enter your name.");
+      } else clearError("name");
+
+      var digits = normalisePhone(phone);
+      if (!digits) fail("phone", "Please enter your mobile number.");
+      else if (digits.length !== 10) fail("phone", "Enter a valid 10-digit mobile number.");
+      else if (!/^[6-9]/.test(digits)) fail("phone", "Indian mobile numbers start with 6, 7, 8 or 9.");
+      else clearError("phone");
+
+      // Email is optional, but must be a real address when provided.
+      if (email && !/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
+        fail("email", "Enter a valid email address, e.g. name@example.com");
+      } else clearError("email");
+
+      var status = document.getElementById("formStatus");
+      if (firstBad) {
+        if (status) {
+          status.textContent = "Please correct the highlighted fields and try again.";
+          status.style.color = "#c0392b";
+        }
+        firstBad.focus();
+        return;
+      }
+
+      phone = digits;
       var subject = "Insurance enquiry from " + (name || "website visitor");
       var body =
         "Name: " + name + "\n" +
@@ -200,7 +268,6 @@
         "&body=" + encodeURIComponent(body);
       window.location.href = mailto;
 
-      var status = document.getElementById("formStatus");
       if (status) {
         status.textContent =
           "Your email app should now open with the details ready to send. If it doesn't, please call us or write to factinsure@gmail.com.";
